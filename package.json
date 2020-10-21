@@ -1,0 +1,26 @@
+{
+  "name": "scrapezone-node-sdk",
+  "version": "1.0.3",
+  "description": "Node.js sdk for using ScrapeZone",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^3.2.0",
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scrapezone/scrapezone-node-sdk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scrapezone/scrapezone-node-sdk/issues"
+  },
+  "homepage": "https://github.com/scrapezone/scrapezone-node-sdk#readme"
+}
