@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const axios = require('axios');
 
 const endpoint = 'https://api.scrapezone.com/scrape';
@@ -8,13 +9,13 @@ class ScrapezoneClient {
         this.password = password;
     }
 
-    async scrape({query, parser_name, country}) {
+    async scrape({query, parserName, country}) {
         try {
             const {data} = await axios.post(
                 endpoint,
                 {
                     query,
-                    parser_name,
+                    parserName,
                     country
                 },
                 {
@@ -46,10 +47,12 @@ class ScrapezoneClient {
                 });
                 if (data.status === 'done') {
                     const {data: parsedResults} = await axios.get(
-                        data['parsed_results_json']
+                        data.parsed_results_json
                     );
                     return parsedResults;
-                } else if (data.status === 'faulted') {
+                }
+
+                if (data.status === 'faulted') {
                     console.log(data);
                     return null;
                 }
