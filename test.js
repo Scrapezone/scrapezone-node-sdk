@@ -16,7 +16,15 @@ async function run() {
             'https://amazon.com/dp/B084K5HNCB'
         ]
     });
-    console.log(results);
+    return results;
 }
 
-run().catch(e => console.error(e.message));
+run()
+    .then(results => {
+        console.log(results);
+        process.exit(0);
+    })
+    .catch(e => {
+        console.error(e.message);
+        process.exit(1);
+    });
