@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 const axios = require('axios');
 
@@ -9,13 +10,13 @@ class ScrapezoneClient {
         this.password = password;
     }
 
-    async scrape({query, parserName, country}) {
+    async scrape({query, parser_name, country}) {
         try {
             const {data} = await axios.post(
                 endpoint,
                 {
                     query,
-                    parserName,
+                    parser_name,
                     country
                 },
                 {
