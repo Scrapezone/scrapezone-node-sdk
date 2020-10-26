@@ -1,26 +1,46 @@
 {
-  "name": "scrapezone-node-sdk",
-  "version": "1.0.3",
-  "description": "Node.js sdk for using ScrapeZone",
-  "main": "index.js",
-  "dependencies": {
-    "async": "^3.2.0",
-    "axios": "^0.20.0",
-    "dotenv": "^8.2.0",
-    "lodash": "^4.17.20"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/scrapezone/scrapezone-node-sdk.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/scrapezone/scrapezone-node-sdk/issues"
-  },
-  "homepage": "https://github.com/scrapezone/scrapezone-node-sdk#readme"
+    "name": "scrapezone-node-sdk",
+    "version": "1.0.3",
+    "description": "Node.js sdk for using ScrapeZone",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test.js",
+        "lint": "eslint 'src/**/*.js' --fix",
+        "format": "prettier-eslint $PWD/'src/**/*.{js,json}' --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/scrapezone/scrapezone-node-sdk.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/scrapezone/scrapezone-node-sdk/issues"
+    },
+    "homepage": "https://github.com/scrapezone/scrapezone-node-sdk#readme",
+    "dependencies": {
+        "async": "^3.2.0",
+        "axios": "^0.20.0",
+        "dotenv": "^8.2.0",
+        "lodash": "^4.17.20"
+    },
+    "devDependencies": {
+        "eslint": "7.11.0",
+        "eslint-config-airbnb-base": "14.2.0",
+        "eslint-config-prettier": "6.14.0",
+        "eslint-plugin-import": "2.22.1",
+        "eslint-plugin-jest": "24.1.0",
+        "eslint-plugin-prettier": "3.1.4",
+        "husky": "4.3.0",
+        "nodemon": "2.0.6",
+        "prettier": "2.1.2",
+        "prettier-eslint": "11.0.0",
+        "prettier-eslint-cli": "5.0.0",
+        "pretty-quick": "3.1.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    }
 }

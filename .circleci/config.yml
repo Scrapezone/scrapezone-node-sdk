@@ -1,0 +1,50 @@
+version: 2.1
+
+jobs:
+    test:
+        working_directory: ~/repo
+        docker:
+            - image: cimg/node:15.0.1
+        steps:
+            - checkout
+
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      - v1-dependencies-
+
+            - run: npm install
+            - run:
+                  name: Run tests
+                  command: npm run test
+
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths:
+                      - .
+    deploy:
+        working_directory: ~/repo
+        docker:
+            - image: cimg/node:15.0.1
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+            - run:
+                  name: Publish package
+                  command: npm publish
+
+workflows:
+    test-deploy:
+        jobs:
+            - test
+            - deploy:
+                  requires:
+                      - test
