@@ -10,13 +10,13 @@ class ScrapezoneClient {
         this.password = password;
     }
 
-    async scrape({query, parser_name, country}) {
+    async scrape({query, scraper_name, country}) {
         try {
             const {data} = await axios.post(
                 endpoint,
                 {
                     query,
-                    parser_name,
+                    scraper_name,
                     country
                 },
                 {
