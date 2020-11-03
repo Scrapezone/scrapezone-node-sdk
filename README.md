@@ -21,18 +21,18 @@ Send a request with up to 1,000 URLs and receive the raw, unblocked HTML files.
 3. Start getting the data you need.
 
 ## Example request:
+
 ```
 const ScrapezoneClient = require("scrapezone-node-sdk");
 const scrapezoneClient = new ScrapezoneClient("username", "password");
 
 scrapezoneClient.scrape({
-    parser_name: 'amazon_product_display',
+    scraper_name: 'amazon_product_display',
 query: [
     'https://amazon.com/dp/B01LSUQSB0',
     'https://amazon.com/dp/B084K5HNCB'
 ]}).then(results => console.log(results));
 
 ```
-
 
 Full documentation can be found [Here](https://github.com/Scrapezone/documentation).

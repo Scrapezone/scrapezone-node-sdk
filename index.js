@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
 const axios = require('axios');
+const Joi = require('joi');
 
 const endpoint = 'https://api.scrapezone.com/scrape';
 
@@ -10,8 +11,42 @@ class ScrapezoneClient {
         this.password = password;
     }
 
+    async validateScrapeInputs({query, scraper_name, country}) {
+        const schema = Joi.object({
+            query: Joi.array().min(1).max(1000).required(),
+            scraper_name: Joi.string()
+                .valid(
+                    'ebay_product_display',
+                    'google_news',
+                    'homedepot_product_display',
+                    'capterra_company',
+                    'bestbuy_product_display',
+                    'capterra_list',
+                    'amazon_product_display',
+                    'amazon_search',
+                    'flipkart_product_display',
+                    'target_product_display',
+                    'wayfair_product_display',
+                    'etsy_product_display',
+                    'lowes_product_display',
+                    'google_search',
+                    'walmart_product_display'
+                )
+                .required(),
+            country: Joi.string()
+        });
+        await schema.validateAsync({
+            query,
+            scraper_name,
+            country
+        });
+        return true;
+    }
+
     async scrape({query, scraper_name, country}) {
         try {
+            await this.validateScrapeInputs({query, scraper_name, country});
+
             const {data} = await axios.post(
                 endpoint,
                 {
