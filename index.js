@@ -3,10 +3,9 @@
 const axios = require('axios');
 const Joi = require('joi');
 
-const endpoint = 'https://api.scrapezone.com/scrape';
-
 class ScrapezoneClient {
     constructor(username, password) {
+        this.endpoint = 'https://api.scrapezone.com/scrape';
         this.username = username;
         this.password = password;
     }
@@ -14,25 +13,7 @@ class ScrapezoneClient {
     async validateScrapeInputs({query, scraper_name, country}) {
         const schema = Joi.object({
             query: Joi.array().min(1).max(1000).required(),
-            scraper_name: Joi.string()
-                .valid(
-                    'ebay_product_display',
-                    'google_news',
-                    'homedepot_product_display',
-                    'capterra_company',
-                    'bestbuy_product_display',
-                    'capterra_list',
-                    'amazon_product_display',
-                    'amazon_search',
-                    'flipkart_product_display',
-                    'target_product_display',
-                    'wayfair_product_display',
-                    'etsy_product_display',
-                    'lowes_product_display',
-                    'google_search',
-                    'walmart_product_display'
-                )
-                .required(),
+            scraper_name: Joi.string().required(),
             country: Joi.string()
         });
         await schema.validateAsync({
@@ -48,7 +29,7 @@ class ScrapezoneClient {
             await this.validateScrapeInputs({query, scraper_name, country});
 
             const {data} = await axios.post(
-                endpoint,
+                this.endpoint,
                 {
                     query,
                     scraper_name,
@@ -64,10 +45,13 @@ class ScrapezoneClient {
             const results = await this.getResults(data.job_id);
             return results;
         } catch (error) {
-            console.error(
-                'scrapeHtmlBatch function errored',
-                error.response.data
-            );
+            if (error.response.data && error.response.data.errors) {
+                for (const err of error.response.data.errors) {
+                    console.error(`${err.msg}: ${err.value}`);
+                }
+            } else {
+                console.error(error.response.data);
+            }
             throw error;
         }
     }
@@ -75,7 +59,7 @@ class ScrapezoneClient {
     async getResults(jobId) {
         try {
             while (true) {
-                const {data} = await axios.get(`${endpoint}/${jobId}`, {
+                const {data} = await axios.get(`${this.endpoint}/${jobId}`, {
                     auth: {
                         username: this.username,
                         password: this.password
