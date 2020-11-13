@@ -12,10 +12,7 @@ const scrapezoneClient = new ScrapezoneClient(
 async function run() {
     const results = await scrapezoneClient.scrape({
         scraper_name: 'amazon_product_display',
-        query: [
-            'https://amazon.com/dp/B01LSUQSB0',
-            'https://amazon.com/dp/B084K5HNCB'
-        ]
+        query: []
     });
     return results;
 }

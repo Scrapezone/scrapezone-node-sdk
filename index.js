@@ -12,7 +12,7 @@ class ScrapezoneClient {
 
     async validateScrapeInputs({query, scraper_name, country}) {
         const schema = Joi.object({
-            query: Joi.array().min(1).max(1000).required(),
+            query: Joi.array().min(1).max(3000).required(),
             scraper_name: Joi.string().required(),
             country: Joi.string()
         });
@@ -45,14 +45,24 @@ class ScrapezoneClient {
             const results = await this.getResults(data.job_id);
             return results;
         } catch (error) {
-            if (error.response.data && error.response.data.errors) {
+            let errorMessage = 'Error: ';
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.errors
+            ) {
                 for (const err of error.response.data.errors) {
-                    console.error(`${err.msg}: ${err.value}`);
+                    errorMessage = `${errorMessage}\n${err.msg}: ${err.value}`;
                 }
-            } else {
-                console.error(error.response.data);
+                throw new Error(errorMessage);
+            } else if (error.details) {
+                for (const err of error.details) {
+                    errorMessage = `${errorMessage}\n${err.message}`;
+                }
+                throw new Error(errorMessage);
             }
-            throw error;
+            errorMessage = `${errorMessage}\nUnhandled error`;
+            throw new Error(errorMessage);
         }
     }
 
