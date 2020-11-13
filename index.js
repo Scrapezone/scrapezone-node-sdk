@@ -12,7 +12,7 @@ class ScrapezoneClient {
 
     async validateScrapeInputs({query, scraper_name, country}) {
         const schema = Joi.object({
-            query: Joi.array().min(1).max(3000).required(),
+            query: Joi.array().min(1).max(4000).required(),
             scraper_name: Joi.string().required(),
             country: Joi.string()
         });
