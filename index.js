@@ -24,7 +24,7 @@ class ScrapezoneClient {
         return true;
     }
 
-    async scrape({query, scraper_name, country}) {
+    async scrape({query, scraper_name, country, output_type = 'json'}) {
         try {
             await this.validateScrapeInputs({query, scraper_name, country});
 
@@ -42,7 +42,7 @@ class ScrapezoneClient {
                     }
                 }
             );
-            const results = await this.getResults(data.job_id);
+            const results = await this.getResults(data.job_id, output_type);
             return results;
         } catch (error) {
             let errorMessage = 'Error: ';
@@ -66,7 +66,7 @@ class ScrapezoneClient {
         }
     }
 
-    async getResults(jobId) {
+    async getResults(jobId, output_type) {
         try {
             while (true) {
                 const {data} = await axios.get(`${this.endpoint}/${jobId}`, {
@@ -76,17 +76,29 @@ class ScrapezoneClient {
                     }
                 });
                 if (data.status === 'done') {
-                    const {data: parsedResults} = await axios.get(
-                        data.parsed_results_json
-                    );
-                    return parsedResults;
+                    if (output_type === 'html') {
+                        return data.html_files;
+                    }
+
+                    if (output_type === 'json') {
+                        const {data: parsedResults} = await axios.get(
+                            data.parsed_results_json
+                        );
+                        return parsedResults;
+                    }
+
+                    if (output_type === 'csv') {
+                        const {data: parsedResults} = await axios.get(
+                            data.parsed_results_csv
+                        );
+                        return parsedResults;
+                    }
                 }
 
                 if (data.status === 'faulted') {
                     console.log(data);
                     return null;
                 }
-                console.log('Waiting for results..');
                 await this.sleep(2000);
             }
         } catch (error) {
