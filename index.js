@@ -24,7 +24,13 @@ class ScrapezoneClient {
         return true;
     }
 
-    async scrape({query, scraper_name, country, output_type = 'json'}) {
+    async scrape({
+        query,
+        scraper_name,
+        country,
+        output_type = 'json',
+        pages_limit = 10
+    }) {
         try {
             await this.validateScrapeInputs({query, scraper_name, country});
 
@@ -33,7 +39,9 @@ class ScrapezoneClient {
                 {
                     query,
                     scraper_name,
-                    country
+                    country,
+                    output_type,
+                    pages_limit
                 },
                 {
                     auth: {
